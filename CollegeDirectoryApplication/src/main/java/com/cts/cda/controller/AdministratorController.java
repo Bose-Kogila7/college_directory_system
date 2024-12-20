@@ -6,9 +6,11 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 //import org.springframework.stereotype.RestController;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import com.cts.cda.entity.*;
@@ -16,8 +18,11 @@ import com.cts.cda.models.FacultyModel;
 import com.cts.cda.models.StudentModel;
 import com.cts.cda.service.*;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api")
+@Validated
 public class AdministratorController {
 
 	private UserService userService;
@@ -57,17 +62,22 @@ public class AdministratorController {
 	
 	@PostMapping("/admin/add-Student")
 	@PreAuthorize("hasRole('student')")
-	public ResponseEntity<String>  saveStudent(@RequestBody StudentModel studentModel)
+	public ResponseEntity<String>  saveStudent(@Valid @RequestBody StudentModel studentModel)
 	{
+		try {
 		logger.info("Saving Student {}",studentModel.getName());
 		//System.out.println(studentModel.getEmail()+" "+studentModel.getName()+" "+studentModel.getPassword()+" "+studentModel.getUserName()+" "+studentModel.getYear());
 		studentProfileService.saveStudentProfile(studentModel);
 		return ResponseEntity.ok("Saved Sucessfully");
+		}catch(Exception e) {
+			logger.error("Error saving student: {}", e.getMessage()); 
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving student");
+		}
 	}
 	
 	@PostMapping("/admin/add-Faculty")
 	@PreAuthorize("hasRole('faculty')")
-	public ResponseEntity<String>  saveFaculty(@RequestBody FacultyModel facultyModel)
+	public ResponseEntity<String>  saveFaculty(@Valid @RequestBody FacultyModel facultyModel)
 	{
 		logger.info("Saving Faculty {}",facultyModel.getName());
 		facultyProfileService.saveFacultyProfile(facultyModel);

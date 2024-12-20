@@ -41,6 +41,7 @@ public class SecurityConfig {
                             //authorize.anyRequest().authenticated()
                             authorize
                                     .requestMatchers("/api/auth/**").permitAll()
+                                    //.requestMatchers("/api/admin/**").hasRole("student")
                                     .anyRequest().authenticated()
 
                     ).httpBasic(Customizer.withDefaults());

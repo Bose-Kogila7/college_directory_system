@@ -15,7 +15,6 @@ public class FacultyProfile {
     @MapsId
     @OneToOne
     @JoinColumn(name = "user_id")
-    @NotNull(message = "User must not be null")
     private User user;
 
     private String photo;
@@ -23,7 +22,6 @@ public class FacultyProfile {
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;
-    @NotBlank(message = "Office hours must not be blank")
     private String officeHours;
 
 	public Long getUserId() {

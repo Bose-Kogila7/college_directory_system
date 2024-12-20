@@ -20,7 +20,6 @@ public class StudentProfile {
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;
-    @Size(max = 10, message = "year length should not exceed 10 characters")
     private String year;
     
 
