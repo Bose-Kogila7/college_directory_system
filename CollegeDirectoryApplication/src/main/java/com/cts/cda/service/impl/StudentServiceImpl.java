@@ -50,7 +50,7 @@ public class StudentServiceImpl implements StudentProfileService {
 	    System.out.println(savedUser.getId()+" "+savedUser+" "+studentModel.getPhoto()+" "+department+" "+studentModel.getYear());
 	    StudentProfile sp = new StudentProfile();
 	    sp.setUser(savedUser);
-	    sp.setUser(savedUser);
+	    //sp.setUser(savedUser);
 	    sp.setDepartment(department);
 	    sp.setPhoto(studentModel.getPhoto());
 	    sp.setYear(studentModel.getYear());

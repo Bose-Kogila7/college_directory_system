@@ -66,4 +66,25 @@ class CollegeDirectoryApplicationTests {
 		verify(studentProfileService, times(1)).saveStudentProfile(any(StudentModel.class)); 
 //		assertEquals("student1", studentModel.getName()); 
 	}
+	@Test
+	@WithMockUser(roles = "faculty")
+	public void testSaveFaculty() throws Exception {
+	    doNothing().when(facultyProfileService).saveFacultyProfile(any(FacultyModel.class));
+
+	    String facultyJson = "{\"photo\":\"photo1\",\"name\":\"faculty1\",\"email\":\"faculty1@example.com\",\"phone\":\"1234567890\",\"departmentId\":1,\"departmentName\":\"department1\",\"officeHours\":\"9am-5pm\"}";
+
+	    MvcResult result = mockMvc.perform(post("/api/admin/add-Faculty")
+	            .contentType(MediaType.APPLICATION_JSON)
+	            .content(facultyJson))
+	            .andReturn();
+
+	    System.out.println("Status: " + result.getResponse().getStatus());
+	    System.out.println("Response: " + result.getResponse().getContentAsString());
+
+	    assertEquals(200, result.getResponse().getStatus());
+	    assertEquals("Saved Sucessfully", result.getResponse().getContentAsString());
+
+	    verify(facultyProfileService, times(1)).saveFacultyProfile(any(FacultyModel.class));
+	}
+
 }

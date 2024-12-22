@@ -41,7 +41,10 @@ public class SecurityConfig {
                             //authorize.anyRequest().authenticated()
                             authorize
                                     .requestMatchers("/api/auth/**").permitAll()
-                                    //.requestMatchers("/api/admin/**").hasRole("student")
+//                                    .requestMatchers("/api/admin/**").hasRole("student")
+//                                    .requestMatchers("/api/admin/**").hasRole("faculty")
+//                                    .requestMatchers(HttpMethod.POST, "/admin/add-Student").hasRole("student") 
+//                                    .requestMatchers(HttpMethod.POST, "/admin/add-Faculty").hasRole("faculty")
                                     .anyRequest().authenticated()
 
                     ).httpBasic(Customizer.withDefaults());

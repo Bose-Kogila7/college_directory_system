@@ -61,7 +61,6 @@ public class AdministratorController {
 	}
 	
 	@PostMapping("/admin/add-Student")
-	@PreAuthorize("hasRole('student')")
 	public ResponseEntity<String>  saveStudent(@Valid @RequestBody StudentModel studentModel)
 	{
 		try {
@@ -79,9 +78,14 @@ public class AdministratorController {
 	@PreAuthorize("hasRole('faculty')")
 	public ResponseEntity<String>  saveFaculty(@Valid @RequestBody FacultyModel facultyModel)
 	{
+		try {
 		logger.info("Saving Faculty {}",facultyModel.getName());
 		facultyProfileService.saveFacultyProfile(facultyModel);
 		return ResponseEntity.ok("Saved Sucessfully");
+		}catch(Exception e) {
+			logger.error("Error saving faculty: {}", e.getMessage()); 
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving faculty");
+		}
 	}
 	@DeleteMapping("/admin/deleteFaculty/{id}")
     public ResponseEntity<String> deleteFaculty(@PathVariable String  id) {
