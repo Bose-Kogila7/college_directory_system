@@ -61,6 +61,7 @@ public class AdministratorController {
 	}
 	
 	@PostMapping("/admin/add-Student")
+	@PreAuthorize("hasAuthority('student')")
 	public ResponseEntity<String>  saveStudent(@Valid @RequestBody StudentModel studentModel)
 	{
 		try {
@@ -75,7 +76,7 @@ public class AdministratorController {
 	}
 	
 	@PostMapping("/admin/add-Faculty")
-	@PreAuthorize("hasRole('faculty')")
+	@PreAuthorize("hasAuthority('faculty')")
 	public ResponseEntity<String>  saveFaculty(@Valid @RequestBody FacultyModel facultyModel)
 	{
 		try {
