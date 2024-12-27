@@ -58,6 +58,10 @@ public class AuthController {
 //	    	}
 //	    	
 //	    }
+		@PostMapping("/login")
+		public ResponseEntity<String> login(@RequestBody User user){
+			return new ResponseEntity<String>(userService.verify(user),HttpStatus.OK);
+		}
 
 	    @PostMapping("/signup")
 	    public ResponseEntity<?> registerperson(@RequestBody User user){

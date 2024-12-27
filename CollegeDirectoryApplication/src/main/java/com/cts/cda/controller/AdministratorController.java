@@ -42,7 +42,7 @@ public class AdministratorController {
 	private static final Logger logger = LoggerFactory.getLogger(AdministratorController.class);
 	
 	@GetMapping("/admin/getAllStudent")
-	@ResponseBody
+	//@ResponseBody
 	public ResponseEntity<?> getAllStudents() {
 		logger.info("Fetching all Students.");
 	    List<StudentModel> studentList = studentProfileService.getAllStudentModel();
@@ -89,6 +89,7 @@ public class AdministratorController {
 		}
 	}
 	@DeleteMapping("/admin/deleteFaculty/{id}")
+	@PreAuthorize("hasAuthority('faculty')")
     public ResponseEntity<String> deleteFaculty(@PathVariable String  id) {
         try {
         	logger.info("Deleting Faculty...");
@@ -112,6 +113,7 @@ public class AdministratorController {
 	        }
 	    }
 	 @PutMapping("/admin/update/faculty/{Id}")
+	 @PreAuthorize("hasAuthority('faculty')")
 	 public ResponseEntity<String> updateFaculty(@PathVariable String Id,@RequestBody FacultyModel facultyModel)
 	 {
 		 logger.info("Updating Faculty Id{}",Id);

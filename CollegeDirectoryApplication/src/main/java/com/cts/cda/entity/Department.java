@@ -25,6 +25,11 @@ public class Department {
     @OneToMany(mappedBy = "department")
     private List<Course> courses;
 
+    public Department(long id, String name) 
+    { 
+    	this.id = id; 
+    	this.name = name; 
+    }
 	public Long getId() {
 		return id;
 	}

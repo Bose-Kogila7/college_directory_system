@@ -47,6 +47,7 @@ public class FacultyController {
 		return ResponseEntity.ok(studentList);
 	}
 	@PostMapping("/faculty/update/{id}")
+	@PreAuthorize("hasAuthority('faculty')")
     public ResponseEntity<FacultyModel> updateFaculty(@PathVariable String id, @RequestBody FacultyModel updateDTO) {
         System.out.print(id+" "+updateDTO.getOfficeHours()+" ");
 		FacultyProfile updatedFaculty = facultyProfileService.updateFacultyProfile(Long.parseLong(id),updateDTO);
