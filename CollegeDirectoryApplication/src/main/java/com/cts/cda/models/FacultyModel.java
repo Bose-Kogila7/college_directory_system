@@ -11,7 +11,8 @@ public class FacultyModel {
 	    private String photo;
 	    @NotBlank(message = "Name must not be blank")
 	    private String name;
-	    @NotBlank(message = "Email must not be blank") 
+	    private String password;
+		@NotBlank(message = "Email must not be blank") 
 	    @Email(message = "Email should be valid")
 	    private String email;
 	    @Pattern(regexp = "^(\\+\\d{1,3}[- ]?)?\\d{10}$", message = "Phone number should be valid")
@@ -32,7 +33,13 @@ public class FacultyModel {
 	        this.departmentName = departmentName;
 	        this.officeHours=officeHours;
 	    }
-	    
+	    public String getPassword() {
+			return password;
+		}
+
+		public void setPassword(String password) {
+			this.password = password;
+		}
 		public Long getId() {
 			return id;
 		}

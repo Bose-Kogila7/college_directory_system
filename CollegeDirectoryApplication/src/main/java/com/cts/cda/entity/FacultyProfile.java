@@ -16,9 +16,16 @@ public class FacultyProfile {
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
+    private String password;
+    public String getPassword() {
+		return password;
+	}
 
-    private String photo;
-    
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	private String photo;
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;

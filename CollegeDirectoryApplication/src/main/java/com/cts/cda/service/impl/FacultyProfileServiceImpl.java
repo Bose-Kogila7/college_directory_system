@@ -1,6 +1,7 @@
 package com.cts.cda.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -37,7 +38,7 @@ private PasswordEncoder passwordEncoder;
 	@Override
 	public void saveFacultyProfile(FacultyModel facultyModel) {
 		User user = new User(facultyModel.getId(),facultyModel.getName(),"faculty",facultyModel.getName(),facultyModel.getEmail(),facultyModel.getPhone());
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		user.setPassword(passwordEncoder.encode(facultyModel.getPassword()));
 		user = userRepository.save(user);
 	    Department department = departmentRepository.findById(facultyModel.getDepartmentId())
 	            .orElseThrow(() -> new RuntimeException("Department not found"));
@@ -46,6 +47,7 @@ private PasswordEncoder passwordEncoder;
 		fp.setUser(user);
 		fp.setDepartment(department);
 		fp.setOfficeHours(facultyModel.getOfficeHours());
+		fp.setPassword(passwordEncoder.encode(facultyModel.getPassword()));
 		fp.setPhoto(facultyModel.getPhoto());
 		facultyProfileRepository.save(fp);
 	}
@@ -72,6 +74,7 @@ private PasswordEncoder passwordEncoder;
 		user.setEmail(updateDTO.getEmail());
         user.setPhone(updateDTO.getPhone());
         user.setName(updateDTO.getName());
+        user.setPassword(passwordEncoder.encode(updateDTO.getPassword()));
         user = userRepository.save(user);
         
 		FacultyModel fp = facultyProfileRepository.findFacultyByUserId(id);
@@ -80,6 +83,7 @@ private PasswordEncoder passwordEncoder;
 		            .orElseThrow(() -> new RuntimeException("Department not found"));
 		fac.setOfficeHours(updateDTO.getOfficeHours());
         fac.setPhoto(updateDTO.getPhoto());
+        fac.setPassword(passwordEncoder.encode(updateDTO.getPassword()));
         fac.setUser(user);
         fac.setDepartment(department);
 		
@@ -90,6 +94,12 @@ private PasswordEncoder passwordEncoder;
 	public List<FacultyModel> getAllFacultyModel() {
 		// TODO Auto-generated method stub
 		return facultyProfileRepository.findAllFacultyModel();
+	}
+
+	@Override
+	public Optional<FacultyProfile> findById(long id) {
+		// TODO Auto-generated method stub
+		return facultyProfileRepository.findById(id);
 	}
 	
 	

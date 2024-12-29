@@ -1,6 +1,7 @@
 package com.cts.cda.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.cts.cda.entity.FacultyProfile;
 import com.cts.cda.models.FacultyModel;
@@ -14,4 +15,5 @@ public interface FacultyProfileService {
 	FacultyModel getFacultyProfileByuserId(Long userId);
 	void deleteFacultyProfileById(Long id);
 	List<FacultyModel> getAllFacultyModel();
+	Optional<FacultyProfile> findById(long long1);
 }

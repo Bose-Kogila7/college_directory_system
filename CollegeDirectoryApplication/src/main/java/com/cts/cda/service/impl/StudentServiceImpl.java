@@ -1,6 +1,7 @@
 package com.cts.cda.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -91,6 +92,12 @@ public class StudentServiceImpl implements StudentProfileService {
 	@Override
 	public List<StudentModel> getAllStudentModel() {
 		return studentProfileRepository.findAllStudentModel();
+	}
+
+	@Override
+	public Optional<StudentProfile> findById(long id) {
+		// TODO Auto-generated method stub
+		return studentProfileRepository.findById(id);
 	}
 	
 	

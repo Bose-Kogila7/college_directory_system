@@ -1,7 +1,11 @@
 package com.cts.cda.controller;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -38,7 +42,9 @@ public class FacultyController {
 		this.facultyProfileService = facultyProfileService;
 		this.enrollmentService=enrollmentService;
 	}
+	private static final Logger logger = LoggerFactory.getLogger(FacultyController.class);
 	@GetMapping("/faculty/student-by-course/{facultyId}")
+	@PreAuthorize("hasAuthority('faculty')")
 	@ResponseBody
 	public ResponseEntity<?> getStudentList(@PathVariable Long facultyId)
 	{
@@ -46,13 +52,24 @@ public class FacultyController {
 		List<StudentCourseModel>  studentList = enrollmentService.getStudentsByFacultyId(facultyId);
 		return ResponseEntity.ok(studentList);
 	}
-	@PostMapping("/faculty/update/{id}")
+	@PutMapping("/faculty/update/{Id}")
 	@PreAuthorize("hasAuthority('faculty')")
-    public ResponseEntity<FacultyModel> updateFaculty(@PathVariable String id, @RequestBody FacultyModel updateDTO) {
-        System.out.print(id+" "+updateDTO.getOfficeHours()+" ");
-		FacultyProfile updatedFaculty = facultyProfileService.updateFacultyProfile(Long.parseLong(id),updateDTO);
-		System.out.println("-----------"+updatedFaculty.getOfficeHours());
-		return ResponseEntity.ok(facultyProfileService.getFacultyProfileByuserId(updatedFaculty.getUserId()));
-    }
+    public ResponseEntity<String> updateFaculty(@PathVariable String Id, @RequestBody FacultyModel facultyModel) {
+		try {
+			logger.info("Checking if Faculty with ID {} exists...", Id);
+			Optional<FacultyProfile> facultyProfile = facultyProfileService.findById(Long.parseLong(Id));
+			if (facultyProfile.isPresent()) {
+				logger.info("Updating Faculty with ID {}", Id);
+				FacultyProfile fp = facultyProfileService.updateFacultyProfile(Long.parseLong(Id), facultyModel);
+				return ResponseEntity.ok("Updated Faculty successfully.");
+			} else {
+				logger.warn("Faculty with ID {} not found.", Id);
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Faculty ID not found.");
+			}
+		} catch (Exception e) {
+			logger.error("Error updating Faculty ID {}: {}", Id, e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("Error updating faculty: " + e.getMessage());
+		}}
 	
 }
