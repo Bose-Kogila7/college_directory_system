@@ -148,4 +148,24 @@ public class AdministratorController {
 					.body("Error updating faculty: " + e.getMessage());
 		}
 	}
+	@PutMapping("/admin/update/{Id}")
+	@PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<String> updateStudent(@PathVariable String Id, @RequestBody StudentModel studentModel) {
+		try {
+			logger.info("Checking if Student with ID {} exists...", Id);
+			Optional<StudentProfile> studentProfile = studentProfileService.findById(Long.parseLong(Id));
+			if (studentProfile.isPresent()) {
+				logger.info("Updating Student with ID {}", Id);
+				StudentProfile fp = studentProfileService.updateStudentProfile(Long.parseLong(Id), studentModel);
+				return ResponseEntity.ok("Updated Student successfully.");
+			} else {
+				logger.warn("Student with ID {} not found.", Id);
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Student ID not found.");
+			}
+		} catch (Exception e) {
+			logger.error("Error updating Student ID {}: {}", Id, e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("Error updating student: " + e.getMessage());
+		}
+	}
 }

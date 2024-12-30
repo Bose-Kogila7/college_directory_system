@@ -32,7 +32,19 @@ public class StudentModel {
         this.email = email;
         this.phone = phone;
     }
+    public StudentModel(Long id, Long userId, String photo, String name, String email, String phone, Long departmentId, String departmentName, String year) {
+        this.id = id;
+        this.userId = userId;
+        this.photo = photo;
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.departmentId = departmentId;
+        this.year = year;
+    }
 
+	public StudentModel() {
+	}
 	public Long getId() {
 		return id;
 	}

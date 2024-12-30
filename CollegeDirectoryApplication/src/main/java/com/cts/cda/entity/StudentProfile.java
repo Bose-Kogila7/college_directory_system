@@ -9,8 +9,9 @@ public class StudentProfile {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
+	private String password;
 
-    @MapsId
+	@MapsId
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -36,7 +37,13 @@ public class StudentProfile {
 		this.year = year;
 	}
 
-	
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
 
 	public Long getUserId() {

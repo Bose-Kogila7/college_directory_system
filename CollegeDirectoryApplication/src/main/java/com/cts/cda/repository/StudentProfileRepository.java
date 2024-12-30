@@ -31,6 +31,14 @@ public interface StudentProfileRepository extends JpaRepository<StudentProfile, 
             "JOIN sp.user u " +
             "JOIN sp.department d " )
 	 List<StudentModel> findAllStudentModel();
+   
+    @Query("SELECT new com.cts.cda.models.StudentModel(s.id, s.user.id, s.photo, u.name, u.email, u.phone, d.id, d.name, s.year) " +
+               "FROM StudentProfile s " +
+               "JOIN s.user u " +
+               "JOIN s.department d " +
+               "WHERE s.user.id = :userId")
+      StudentModel findStudentByUserId(@Param("userId") Long userId);
+
     
     
 	

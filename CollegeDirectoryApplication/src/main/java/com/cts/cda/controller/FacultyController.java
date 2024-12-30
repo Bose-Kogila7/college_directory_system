@@ -70,6 +70,7 @@ public class FacultyController {
 			logger.error("Error updating Faculty ID {}: {}", Id, e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body("Error updating faculty: " + e.getMessage());
-		}}
+		}
+	}
 	
 }

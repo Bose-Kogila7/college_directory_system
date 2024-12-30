@@ -18,7 +18,6 @@ import com.cts.cda.repository.StudentProfileRepository;
 import com.cts.cda.repository.UserRepository;
 import com.cts.cda.service.StudentProfileService;
 
-
 @Service
 public class StudentServiceImpl implements StudentProfileService {
 
@@ -26,12 +25,14 @@ public class StudentServiceImpl implements StudentProfileService {
 	private UserRepository userRepository;
 	private DepartmentRepository departmentRepository;
 	private PasswordEncoder passwordEncoder;
-	public StudentServiceImpl(StudentProfileRepository studentProfileRepository, UserRepository userRepository,DepartmentRepository departmentRepository, PasswordEncoder passwordEncoder) {
+
+	public StudentServiceImpl(StudentProfileRepository studentProfileRepository, UserRepository userRepository,
+			DepartmentRepository departmentRepository, PasswordEncoder passwordEncoder) {
 		super();
 		this.studentProfileRepository = studentProfileRepository;
-		 this.userRepository = userRepository;
-		 this.departmentRepository = departmentRepository;
-		 this.passwordEncoder = passwordEncoder;
+		this.userRepository = userRepository;
+		this.departmentRepository = departmentRepository;
+		this.passwordEncoder = passwordEncoder;
 	}
 
 	@Override
@@ -39,23 +40,28 @@ public class StudentServiceImpl implements StudentProfileService {
 		// TODO Auto-generated method stub
 		return studentProfileRepository.findAll();
 	}
+
 	@Override
 	public void saveStudentProfile(StudentModel studentModel) {
-		System.out.println(studentModel.getEmail()+" "+studentModel.getName()+" "+studentModel.getPassword()+" "+studentModel.getUserName()+" "+studentModel.getYear());
-	    User user = new User(studentModel.getId(),studentModel.getUserName(),studentModel.getRole(),studentModel.getName(),studentModel.getEmail(),studentModel.getPhone());
-	    user.setPassword(passwordEncoder.encode(user.getPassword()));
-	    User savedUser = userRepository.save(user);
-	    System.out.println(savedUser.getId()+" "+savedUser.getEmail()+" "+savedUser.getPassword());
-	    Department department = departmentRepository.findById(studentModel.getDepartmentId())
-	        .orElseThrow(() -> new RuntimeException("Department not found"));
-	    System.out.println(savedUser.getId()+" "+savedUser+" "+studentModel.getPhoto()+" "+department+" "+studentModel.getYear());
-	    StudentProfile sp = new StudentProfile();
-	    sp.setUser(savedUser);
-	    //sp.setUser(savedUser);
-	    sp.setDepartment(department);
-	    sp.setPhoto(studentModel.getPhoto());
-	    sp.setYear(studentModel.getYear());
-	    studentProfileRepository.save(sp);
+		System.out.println(studentModel.getEmail() + " " + studentModel.getName() + " " + studentModel.getPassword()
+				+ " " + studentModel.getUserName() + " " + studentModel.getYear());
+		User user = new User(studentModel.getId(), studentModel.getUserName(), studentModel.getRole(),
+				studentModel.getName(), studentModel.getEmail(), studentModel.getPhone());
+		user.setPassword(passwordEncoder.encode(studentModel.getPassword()));
+		User savedUser = userRepository.save(user);
+		System.out.println(savedUser.getId() + " " + savedUser.getEmail() + " " + savedUser.getPassword());
+		Department department = departmentRepository.findById(studentModel.getDepartmentId())
+				.orElseThrow(() -> new RuntimeException("Department not found"));
+		System.out.println(savedUser.getId() + " " + savedUser + " " + studentModel.getPhoto() + " " + department + " "
+				+ studentModel.getYear());
+		StudentProfile sp = new StudentProfile();
+		sp.setUser(savedUser);
+		// sp.setUser(savedUser);
+		sp.setDepartment(department);
+		sp.setPassword(passwordEncoder.encode(studentModel.getPassword()));
+		sp.setPhoto(studentModel.getPhoto());
+		sp.setYear(studentModel.getYear());
+		studentProfileRepository.save(sp);
 	}
 
 	@Override
@@ -80,7 +86,7 @@ public class StudentServiceImpl implements StudentProfileService {
 	public void deleteStudentProfileById(Long id) {
 		// TODO Auto-generated method stub
 		studentProfileRepository.deleteById(id);
-		
+
 	}
 
 	@Override
@@ -99,7 +105,25 @@ public class StudentServiceImpl implements StudentProfileService {
 		// TODO Auto-generated method stub
 		return studentProfileRepository.findById(id);
 	}
-	
-	
-	
+
+	@Override
+	public StudentProfile updateStudentProfile(long id, StudentModel studentModel) {
+		User user = userRepository.findById(id).get();
+		user.setEmail(studentModel.getEmail());
+		user.setPhone(studentModel.getPhone());
+		user.setName(studentModel.getName());
+		user.setPassword(passwordEncoder.encode(studentModel.getPassword()));
+		user = userRepository.save(user);
+
+		StudentModel sp = studentProfileRepository.findStudentByUserId(id);
+		StudentProfile sac = studentProfileRepository.findById(sp.getId()).get();
+		Department department = departmentRepository.findById(studentModel.getDepartmentId())
+				.orElseThrow(() -> new RuntimeException("Department not found"));
+		sac.setPhoto(studentModel.getPhoto());
+		sac.setYear(studentModel.getYear());
+		sac.setPassword(passwordEncoder.encode(studentModel.getPassword())); 
+		sac.setUser(user);
+		return studentProfileRepository.save(sac);
+	}
+
 }

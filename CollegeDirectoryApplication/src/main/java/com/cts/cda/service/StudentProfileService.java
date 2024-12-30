@@ -17,4 +17,5 @@ public interface StudentProfileService {
 	List<StudentModel> getStudentByKey(String key);
 	List<StudentModel> getAllStudentModel();
 	Optional<StudentProfile> findById(long long1);
+	StudentProfile updateStudentProfile(long long1, StudentModel studentModel);
 }
