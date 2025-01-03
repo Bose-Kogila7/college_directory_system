@@ -47,7 +47,7 @@ public class StudentServiceImpl implements StudentProfileService {
 				+ " " + studentModel.getUserName() + " " + studentModel.getYear());
 		User user = new User(studentModel.getId(), studentModel.getUserName(), studentModel.getRole(),
 				studentModel.getName(), studentModel.getEmail(), studentModel.getPhone());
-		user.setPassword(passwordEncoder.encode(studentModel.getPassword()));
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		User savedUser = userRepository.save(user);
 		System.out.println(savedUser.getId() + " " + savedUser.getEmail() + " " + savedUser.getPassword());
 		Department department = departmentRepository.findById(studentModel.getDepartmentId())
@@ -58,7 +58,7 @@ public class StudentServiceImpl implements StudentProfileService {
 		sp.setUser(savedUser);
 		// sp.setUser(savedUser);
 		sp.setDepartment(department);
-		sp.setPassword(passwordEncoder.encode(studentModel.getPassword()));
+		sp.setPassword(passwordEncoder.encode(user.getPassword()));
 		sp.setPhoto(studentModel.getPhoto());
 		sp.setYear(studentModel.getYear());
 		studentProfileRepository.save(sp);

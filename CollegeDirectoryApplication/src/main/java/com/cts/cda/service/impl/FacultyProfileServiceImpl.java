@@ -38,7 +38,7 @@ private PasswordEncoder passwordEncoder;
 	@Override
 	public void saveFacultyProfile(FacultyModel facultyModel) {
 		User user = new User(facultyModel.getId(),facultyModel.getName(),"faculty",facultyModel.getName(),facultyModel.getEmail(),facultyModel.getPhone());
-		user.setPassword(passwordEncoder.encode(facultyModel.getPassword()));
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		user = userRepository.save(user);
 	    Department department = departmentRepository.findById(facultyModel.getDepartmentId())
 	            .orElseThrow(() -> new RuntimeException("Department not found"));
@@ -47,7 +47,7 @@ private PasswordEncoder passwordEncoder;
 		fp.setUser(user);
 		fp.setDepartment(department);
 		fp.setOfficeHours(facultyModel.getOfficeHours());
-		fp.setPassword(passwordEncoder.encode(facultyModel.getPassword()));
+		fp.setPassword(passwordEncoder.encode(user.getPassword()));
 		fp.setPhoto(facultyModel.getPhoto());
 		facultyProfileRepository.save(fp);
 	}

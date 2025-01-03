@@ -10,6 +10,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.cts.cda.entity.User;
+import com.cts.cda.models.StudentModel;
+import com.cts.cda.models.UserModel;
 import com.cts.cda.repository.UserRepository;
 import com.cts.cda.security.JWTService;
 import com.cts.cda.service.UserService;
@@ -39,6 +41,10 @@ public class UserServiceImpl implements UserService {
 	public List<User> getAllUsers() {
 		// TODO Auto-generated method stub
 		return userRepository.findAll();
+	}
+	@Override
+	public List<UserModel> getAllUserModel() {
+		return userRepository.findAllUserModels();
 	}
 
 	@Override

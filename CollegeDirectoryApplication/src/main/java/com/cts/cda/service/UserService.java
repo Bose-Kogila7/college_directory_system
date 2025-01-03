@@ -16,4 +16,5 @@ public interface UserService {
 //	User getUserByemail(String email);
 	void deleteUserById(Long id);
 	String verify(User user);
+	List<com.cts.cda.models.UserModel> getAllUserModel();
 }

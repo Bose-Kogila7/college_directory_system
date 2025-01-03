@@ -39,7 +39,7 @@ public class UserController {
 	@PreAuthorize("hasAuthority('ADMIN')")
 	public ResponseEntity<?> getAllUsers() {
 		logger.info("Fetching all Students.");
-		List<User> userList = userService.getAllUsers();
+		List<UserModel> userList = userService.getAllUserModel();
 		logger.info("Fetched {} users.", userList.size());
 		return ResponseEntity.ok(userList);
 	}

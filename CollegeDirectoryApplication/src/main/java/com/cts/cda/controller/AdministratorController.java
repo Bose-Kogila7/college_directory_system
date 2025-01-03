@@ -59,7 +59,7 @@ public class AdministratorController {
 	}
 
 	@PostMapping("/admin/add-Student")
-	@PreAuthorize("hasAuthority('student')")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public ResponseEntity<String> saveStudent(@Valid @RequestBody StudentModel studentModel) {
 		try {
 			logger.info("Saving Student {}", studentModel.getName());
@@ -148,7 +148,7 @@ public class AdministratorController {
 					.body("Error updating faculty: " + e.getMessage());
 		}
 	}
-	@PutMapping("/admin/update/{Id}")
+	@PutMapping("/admin/update/student/{Id}")
 	@PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> updateStudent(@PathVariable String Id, @RequestBody StudentModel studentModel) {
 		try {
