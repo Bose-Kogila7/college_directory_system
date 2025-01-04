@@ -2,7 +2,11 @@ package com.cts.cda.service.impl;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -10,27 +14,33 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.cts.cda.entity.User;
+import com.cts.cda.models.SignupModel;
 import com.cts.cda.models.StudentModel;
 import com.cts.cda.models.UserModel;
 import com.cts.cda.repository.UserRepository;
 import com.cts.cda.security.JWTService;
 import com.cts.cda.service.UserService;
 
+import jakarta.transaction.Transactional;
+
+@Transactional
 @Service
 public class UserServiceImpl implements UserService {
-	
+
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
+
 	@Autowired
 	private JWTService jwtService;
-	
+
 	@Autowired
 	private AuthenticationManager authenticationManager;
-	
+
+	private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+
 //
 //	public UserServiceImpl(UserRepository userRepository) {
 //		super();
@@ -42,6 +52,7 @@ public class UserServiceImpl implements UserService {
 		// TODO Auto-generated method stub
 		return userRepository.findAll();
 	}
+
 	@Override
 	public List<UserModel> getAllUserModel() {
 		return userRepository.findAllUserModels();
@@ -88,8 +99,12 @@ public class UserServiceImpl implements UserService {
 			return "fail";
 		}
 	}
-
-	
-
-	
+	@Override
+	public boolean usernameExists(String username) {
+		return userRepository.existsByUsername(username);
+	}
+	@Override
+	public boolean emailExists(String email) {
+		return userRepository.existsByEmail(email);
+	}
 }

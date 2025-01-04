@@ -67,7 +67,6 @@ public class StudentControllerr {
 	}
 
 	@GetMapping("/student/course/{Id}")
-	@PreAuthorize("hasAuthority('student')")
 	@ResponseBody
 	public ResponseEntity<?> getCourseList(@PathVariable String Id) {
 		System.out.println("Hey");
@@ -97,7 +96,7 @@ public class StudentControllerr {
 	}
 
 	@PostMapping("/student/enroll")
-	@PreAuthorize("hasAuthority('student')")
+	@PreAuthorize("hasAnyAuthority('student', 'ADMIN')")
 	public ResponseEntity<String> enrollInCourse(@RequestBody EnrollmentModel enrollmentModel) {
 		try {
 			enrollmentService.enrollStudentInCourse(enrollmentModel.getStudent_id(), enrollmentModel.getCourse_id());

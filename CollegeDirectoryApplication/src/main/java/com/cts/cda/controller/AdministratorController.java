@@ -88,7 +88,7 @@ public class AdministratorController {
 	}
 
 	@DeleteMapping("/admin/deleteFaculty/{id}")
-	@PreAuthorize("hasAuthority('faculty')")
+	@PreAuthorize("hasAnyAuthority('faculty', 'ADMIN')")
 	public ResponseEntity<String> deleteFaculty(@PathVariable String id) {
 		try {
 			logger.info("Checking if Faculty with ID {} exists...", id);
@@ -109,6 +109,7 @@ public class AdministratorController {
 	}
 
 	@DeleteMapping("/admin/deleteStudent/{id}")
+	@PreAuthorize("hasAnyAuthority('student', 'ADMIN')")
 	public ResponseEntity<String> deleteStudent(@PathVariable String id) {
 		try {
 			logger.info("Checking if Student with ID {} exists...", id);

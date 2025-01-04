@@ -9,4 +9,6 @@ public class SignupModel {
 	    private String username;
 	    private String email;
 	    private String password;
+	    private String phone;
+	    private String role;
 }

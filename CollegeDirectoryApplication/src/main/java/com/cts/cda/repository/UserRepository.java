@@ -15,4 +15,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	@Query("SELECT new com.cts.cda.models.UserModel(u.id, u.username,null, u.role, u.name, u.email, u.phone) "
 			+ "FROM User u")
 	List<UserModel> findAllUserModels();
+	Boolean existsByUsername(String username); 
+	Boolean existsByEmail(String email);
 }
