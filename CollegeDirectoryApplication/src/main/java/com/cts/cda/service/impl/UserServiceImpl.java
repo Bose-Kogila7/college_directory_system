@@ -41,11 +41,7 @@ public class UserServiceImpl implements UserService {
 
 	private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
-//
-//	public UserServiceImpl(UserRepository userRepository) {
-//		super();
-//		this.userRepository = userRepository;
-//	}
+
 
 	@Override
 	public List<User> getAllUsers() {
@@ -77,10 +73,6 @@ public class UserServiceImpl implements UserService {
 		return userRepository.save(user);
 	}
 
-//	@Override
-//	public User getUserByemail(String email) {
-//		return userRepository.findByEmail(email);
-//	}
 
 	@Override
 	public void deleteUserById(Long id) {

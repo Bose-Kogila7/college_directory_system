@@ -62,10 +62,10 @@ public class AdministratorController {
 	@PreAuthorize("hasAuthority('ADMIN')")
 	public ResponseEntity<String> saveStudent(@Valid @RequestBody StudentModel studentModel) {
 		try {
+			if (userService.emailExists(studentModel.getEmail())) {
+				return new ResponseEntity<>("Email is already taken!", HttpStatus.BAD_REQUEST);
+			}
 			logger.info("Saving Student {}", studentModel.getName());
-			// System.out.println(studentModel.getEmail()+" "+studentModel.getName()+"
-			// "+studentModel.getPassword()+" "+studentModel.getUserName()+"
-			// "+studentModel.getYear());
 			studentProfileService.saveStudentProfile(studentModel);
 			return ResponseEntity.ok("Saved Sucessfully");
 		} catch (Exception e) {
@@ -78,6 +78,9 @@ public class AdministratorController {
 	@PreAuthorize("hasAuthority('ADMIN')")
 	public ResponseEntity<String> saveFaculty(@Valid @RequestBody FacultyModel facultyModel) {
 		try {
+			if (userService.emailExists(facultyModel.getEmail())) {
+				return new ResponseEntity<>("Email is already taken!", HttpStatus.BAD_REQUEST);
+			}
 			logger.info("Saving Faculty {}", facultyModel.getName());
 			facultyProfileService.saveFacultyProfile(facultyModel);
 			return ResponseEntity.ok("Saved Sucessfully");
