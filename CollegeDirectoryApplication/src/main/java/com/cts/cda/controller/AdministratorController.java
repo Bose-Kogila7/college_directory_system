@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 //import org.springframework.stereotype.RestController;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,7 +41,16 @@ public class AdministratorController {
 	}
 
 	private static final Logger logger = LoggerFactory.getLogger(AdministratorController.class);
-
+	
+	 @GetMapping("/admin/profile")
+	    @PreAuthorize("hasAuthority('ADMIN')")
+	    public ResponseEntity<User> getAdminProfile() {
+	        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	        String email = authentication.getName();
+	        User user = userService.findByEmail(email);
+	        return ResponseEntity.ok(user);
+	    }
+	 
 	@GetMapping("/admin/getAllStudent")
 	// @ResponseBody
 	public ResponseEntity<?> getAllStudents() {

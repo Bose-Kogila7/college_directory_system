@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cts.cda.entity.FacultyProfile;
 import com.cts.cda.entity.StudentProfile;
+import com.cts.cda.entity.User;
 import com.cts.cda.models.CourseModel;
 import com.cts.cda.models.EnrollmentModel;
 import com.cts.cda.models.FacultyModel;
@@ -50,6 +53,15 @@ public class StudentControllerr {
 
 	private static final Logger logger = LoggerFactory.getLogger(StudentControllerr.class);
 
+	@GetMapping("/student/profile")
+    public ResponseEntity<User> getStudentProfile() {
+        // Your logic to fetch student profile
+		 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	        String email = authentication.getName();
+		 User user = userService.findByEmail(email);
+	        return ResponseEntity.ok(user);
+    }
+	
 	@GetMapping("/student/search/{Key}")
 	@ResponseBody
 	public ResponseEntity<?> searchStudents(@PathVariable String Key) {

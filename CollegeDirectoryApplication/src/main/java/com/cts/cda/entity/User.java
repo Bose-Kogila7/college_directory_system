@@ -96,6 +96,12 @@ public class User {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
+
+	public User(String password, @Email(message = "Email should be valid") String email) {
+		super();
+		this.password = password;
+		this.email = email;
+	}
 	
 	
 }

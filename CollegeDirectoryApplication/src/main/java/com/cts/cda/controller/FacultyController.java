@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cts.cda.entity.FacultyProfile;
+import com.cts.cda.entity.User;
 import com.cts.cda.models.FacultyModel;
 import com.cts.cda.models.StudentCourseModel;
 import com.cts.cda.service.EnrollmentService;
@@ -43,6 +46,14 @@ public class FacultyController {
 		this.enrollmentService=enrollmentService;
 	}
 	private static final Logger logger = LoggerFactory.getLogger(FacultyController.class);
+	 @GetMapping("/faculty/profile")
+	    public ResponseEntity<User> getFacultyProfile() {
+	        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	        String email = authentication.getName();
+	        User user = userService.findByEmail(email);
+	        return ResponseEntity.ok(user);
+	    }
+	
 	@GetMapping("/faculty/student-by-course/{facultyId}")
 	@PreAuthorize("hasAuthority('faculty')")
 	@ResponseBody

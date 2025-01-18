@@ -1,8 +1,14 @@
 package com.cts.cda.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import com.cts.cda.entity.User;
+import com.cts.cda.repository.UserRepository;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -18,16 +24,21 @@ public class JWTService {
 
 	@Value("${jwt.secret}")
 	private String secretkey;
-
+	@Autowired
+	private UserRepository userRepo;
 
 	public String generateToken(String username) {
+		User user = userRepo.findByEmail(username)
+	            .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + username));
+	    String role = user.getRole();
 		Map<String, Object> claims = new HashMap<>();
+		claims.put("role", role);
 		return Jwts.builder()
 				.claims()
 				.add(claims)
 				.subject(username)
 				.issuedAt(new Date(System.currentTimeMillis()))
-				.expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30))
+				.expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
 				.and()
 				.signWith(getKey())
 				.compact();
@@ -55,7 +66,7 @@ public class JWTService {
      //   System.out.println("extracted user name ", username);
 		return (userName.equals(userDetails.getUsername()) && !isTokenExpired(token));
 	}
-	private boolean isTokenExpired(String token) {
+	public boolean isTokenExpired(String token) {
 		return extractExpiration(token).before(new Date());
 	}
 	private Date extractExpiration(String token) {

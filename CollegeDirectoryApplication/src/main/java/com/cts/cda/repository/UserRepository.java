@@ -10,7 +10,7 @@ import com.cts.cda.entity.User;
 import com.cts.cda.models.UserModel;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-	public Optional<User> findByEmail(String email);
+	Optional<User> findByEmail(String email);
 
 	@Query("SELECT new com.cts.cda.models.UserModel(u.id, u.username,null, u.role, u.name, u.email, u.phone) "
 			+ "FROM User u")

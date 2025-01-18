@@ -23,4 +23,5 @@ public interface UserService {
 	List<UserModel> getAllUserModel();
 	boolean usernameExists(String username);
 	boolean emailExists(String email);
+	User findByEmail(String email);
 }

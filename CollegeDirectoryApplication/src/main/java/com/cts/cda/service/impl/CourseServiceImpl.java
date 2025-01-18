@@ -26,7 +26,9 @@ public class CourseServiceImpl implements CourseService {
 		List<CourseModel> courseModels = new ArrayList<>();
 		for (Course course : courses) {
 			CourseModel model = new CourseModel(
+					course.getId(),
 					course.getTitle(), 
+					course.getDescription(),
 					course.getDepartment().getId(),
 					course.getFaculty().getUserId(), 
 					course.getFaculty().getUser().getName()
