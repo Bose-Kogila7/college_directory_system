@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.cts.cda.entity.*;
 import com.cts.cda.models.FacultyModel;
+import com.cts.cda.models.IdModel;
 import com.cts.cda.models.StudentModel;
 import com.cts.cda.service.*;
 
@@ -100,85 +101,84 @@ public class AdministratorController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving faculty");
 		}
 	}
-
-	@DeleteMapping("/admin/deleteFaculty/{id}")
-	@PreAuthorize("hasAnyAuthority('faculty', 'ADMIN')")
-	public ResponseEntity<String> deleteFaculty(@PathVariable String id) {
+	@DeleteMapping("/admin/deleteFaculty")
+	@PreAuthorize("hasAuthority('ADMIN')")
+	public ResponseEntity<String> deleteFaculty(@RequestBody IdModel dto) {
 		try {
-			logger.info("Checking if Faculty with ID {} exists...", id);
-			Optional<FacultyProfile> facultyProfile = facultyProfileService.findById(Long.parseLong(id));
+			logger.info("Checking if Faculty with ID {} exists...", dto.getId());
+			Optional<FacultyProfile> facultyProfile = facultyProfileService.findById(dto.getId());
 			if (facultyProfile.isPresent()) {
-				logger.info("Deleting Faculty with ID {}", id);
-				facultyProfileService.deleteFacultyProfileById(Long.parseLong(id));
+				logger.info("Deleting Faculty with ID {}", dto.getId());
+				facultyProfileService.deleteFacultyProfileById(dto.getId());
 				return ResponseEntity.ok("Faculty deleted successfully.");
 			} else {
-				logger.warn("Faculty with ID {} not found.", id);
+				logger.warn("Faculty with ID {} not found.", dto.getId());
 				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Faculty ID not found.");
 			}
 		} catch (Exception e) {
-			logger.error("Error deleting faculty id {}: {}", id, e.getMessage());
+			logger.error("Error deleting faculty id {}: {}", dto.getId(), e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body("Error deleting faculty: " + e.getMessage());
 		}
 	}
 
-	@DeleteMapping("/admin/deleteStudent/{id}")
-	@PreAuthorize("hasAnyAuthority('student', 'ADMIN')")
-	public ResponseEntity<String> deleteStudent(@PathVariable String id) {
+	@DeleteMapping("/admin/deleteStudent")
+	@PreAuthorize("hasAuthority('ADMIN')")
+	public ResponseEntity<String> deleteStudent(@RequestBody IdModel dto) {
 		try {
-			logger.info("Checking if Student with ID {} exists...", id);
-			Optional<StudentProfile> studentProfile = studentProfileService.findById(Long.parseLong(id));
+			logger.info("Checking if Student with ID {} exists...", dto.getId());
+			Optional<StudentProfile> studentProfile = studentProfileService.findById(dto.getId());
 			if (studentProfile.isPresent()) {
-				logger.info("Deleting Student with ID {}", id);
-				studentProfileService.deleteStudentProfileById(Long.parseLong(id));
+				logger.info("Deleting Student with ID {}", dto.getId());
+				studentProfileService.deleteStudentProfileById(dto.getId());
 				return ResponseEntity.ok("Student deleted successfully.");
 			} else {
-				logger.warn("Student with ID {} not found.", id);
+				logger.warn("Student with ID {} not found.", dto.getId());
 				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Student ID not found.");
 			}
 		} catch (Exception e) {
-			logger.error("Error deleting Student id {}: {}", id, e.getMessage());
+			logger.error("Error deleting Student id {}: {}", dto.getId(), e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body("Error deleting student: " + e.getMessage());
 		}
 	}
 
-	@PutMapping("/admin/update/faculty/{Id}")
-	@PreAuthorize("hasAuthority('ADMIN')")
-	public ResponseEntity<String> updateFaculty(@PathVariable String Id, @RequestBody FacultyModel facultyModel) {
+	@PutMapping("/faculty/update")
+	@PreAuthorize("hasAnyAuthority('faculty', 'ADMIN')")
+	public ResponseEntity<String> updateFaculty(@RequestBody FacultyModel facultyModel) {
 		try {
-			logger.info("Checking if Faculty with ID {} exists...", Id);
-			Optional<FacultyProfile> facultyProfile = facultyProfileService.findById(Long.parseLong(Id));
+			logger.info("Checking if Faculty with ID {} exists...", facultyModel.getId());
+			Optional<FacultyProfile> facultyProfile = facultyProfileService.findById(facultyModel.getId());
 			if (facultyProfile.isPresent()) {
-				logger.info("Updating Faculty with ID {}", Id);
-				FacultyProfile fp = facultyProfileService.updateFacultyProfile(Long.parseLong(Id), facultyModel);
+				logger.info("Updating Faculty with ID {}", facultyModel.getId());
+				FacultyProfile fp = facultyProfileService.updateFacultyProfile(facultyModel.getId(), facultyModel);
 				return ResponseEntity.ok("Updated Faculty successfully.");
 			} else {
-				logger.warn("Faculty with ID {} not found.", Id);
+				logger.warn("Faculty with ID {} not found.", facultyModel.getId());
 				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Faculty ID not found.");
 			}
 		} catch (Exception e) {
-			logger.error("Error updating Faculty ID {}: {}", Id, e.getMessage());
+			logger.error("Error updating Faculty ID {}: {}", facultyModel.getId(), e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body("Error updating faculty: " + e.getMessage());
 		}
 	}
-	@PutMapping("/admin/update/student/{Id}")
-	@PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<String> updateStudent(@PathVariable String Id, @RequestBody StudentModel studentModel) {
+	@PutMapping("/student/update")
+	@PreAuthorize("hasAnyAuthority('student', 'ADMIN')")
+    public ResponseEntity<String> updateStudent(@RequestBody StudentModel studentModel) {
 		try {
-			logger.info("Checking if Student with ID {} exists...", Id);
-			Optional<StudentProfile> studentProfile = studentProfileService.findById(Long.parseLong(Id));
+			logger.info("Checking if Student with ID {} exists...", studentModel.getId());
+			Optional<StudentProfile> studentProfile = studentProfileService.findById(studentModel.getId());
 			if (studentProfile.isPresent()) {
-				logger.info("Updating Student with ID {}", Id);
-				StudentProfile fp = studentProfileService.updateStudentProfile(Long.parseLong(Id), studentModel);
+				logger.info("Updating Student with ID {}", studentModel.getId());
+				StudentProfile fp = studentProfileService.updateStudentProfile(studentModel.getId(), studentModel);
 				return ResponseEntity.ok("Updated Student successfully.");
 			} else {
-				logger.warn("Student with ID {} not found.", Id);
+				logger.warn("Student with ID {} not found.", studentModel.getId());
 				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Student ID not found.");
 			}
 		} catch (Exception e) {
-			logger.error("Error updating Student ID {}: {}", Id, e.getMessage());
+			logger.error("Error updating Student ID {}: {}", studentModel.getId(), e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body("Error updating student: " + e.getMessage());
 		}

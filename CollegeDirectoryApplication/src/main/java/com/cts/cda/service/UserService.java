@@ -1,6 +1,7 @@
 package com.cts.cda.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 
@@ -24,4 +25,5 @@ public interface UserService {
 	boolean usernameExists(String username);
 	boolean emailExists(String email);
 	User findByEmail(String email);
+	Optional<User> findById(Long id);
 }

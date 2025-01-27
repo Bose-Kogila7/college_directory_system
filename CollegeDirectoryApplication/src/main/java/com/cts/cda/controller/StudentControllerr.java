@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -41,6 +42,7 @@ public class StudentControllerr {
 	private StudentProfileService studentProfileService;
 	private FacultyProfileService facultyProfileService;
 	private EnrollmentService enrollmentService;
+	
 
 	public StudentControllerr(UserService userService, StudentProfileService studentProfileService,
 			FacultyProfileService facultyProfileService, EnrollmentService enrollmentService) {
@@ -111,6 +113,21 @@ public class StudentControllerr {
 	@PreAuthorize("hasAnyAuthority('student', 'ADMIN')")
 	public ResponseEntity<String> enrollInCourse(@RequestBody EnrollmentModel enrollmentModel) {
 		try {
+		 // Check if the student ID exists in the StudentProfile database
+        Optional<StudentProfile> studentProfile = studentProfileService.findById(enrollmentModel.getStudent_id());
+        if (!studentProfile.isPresent()) {
+        	logger.info("You are not a student. Contact your administrator.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("You are not a student. Contact your administrator.");
+        }
+     // Check if the student is already enrolled in the course
+        boolean isAlreadyEnrolled = enrollmentService.isStudentEnrolledInCourse(enrollmentModel.getStudent_id(), enrollmentModel.getCourse_id());
+        if (isAlreadyEnrolled) {
+            logger.info("You are already enrolled in the course.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("You are already enrolled in the course.");
+        }
+     // Proceed with enrollment if student ID exists
 			enrollmentService.enrollStudentInCourse(enrollmentModel.getStudent_id(), enrollmentModel.getCourse_id());
 			return ResponseEntity.ok("Student enrolled in course successfully.");
 		} catch (Exception e) {
@@ -130,5 +147,9 @@ public class StudentControllerr {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 	}
+	@GetMapping("/student/image/{id}")
+    public ResponseEntity<byte[]> getImage(@PathVariable Long id) {
+        return studentProfileService.getImage(id);
+    }
 
 }

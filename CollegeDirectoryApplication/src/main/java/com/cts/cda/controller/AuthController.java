@@ -83,7 +83,9 @@ public class AuthController {
 
 	@PostMapping("/signup")
 	public ResponseEntity<?> registerperson(@RequestBody User user) {
-
+		if(user.getRole().equalsIgnoreCase("ADMIN")) {
+			return new ResponseEntity<>("Change the role. You can't signup using role ADMIN!!", HttpStatus.BAD_REQUEST);
+		}
 		if (userService.usernameExists(user.getUsername())) {
 			return new ResponseEntity<>("Username is already taken!", HttpStatus.BAD_REQUEST);
 		}

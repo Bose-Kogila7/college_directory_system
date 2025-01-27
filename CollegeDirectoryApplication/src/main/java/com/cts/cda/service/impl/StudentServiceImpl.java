@@ -3,7 +3,10 @@ package com.cts.cda.service.impl;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +28,8 @@ public class StudentServiceImpl implements StudentProfileService {
 	private UserRepository userRepository;
 	private DepartmentRepository departmentRepository;
 	private PasswordEncoder passwordEncoder;
+	
+	 private static final Logger logger = LoggerFactory.getLogger(StudentProfileService.class);
 
 	public StudentServiceImpl(StudentProfileRepository studentProfileRepository, UserRepository userRepository,
 			DepartmentRepository departmentRepository, PasswordEncoder passwordEncoder) {
@@ -124,6 +129,22 @@ public class StudentServiceImpl implements StudentProfileService {
 		sac.setPassword(passwordEncoder.encode(studentModel.getPassword())); 
 		sac.setUser(user);
 		return studentProfileRepository.save(sac);
+	}
+
+	@Override
+	public ResponseEntity<byte[]> getImage(Long id) {
+		try {
+            StudentProfile student = studentProfileRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Student not found with ID: " + id));
+
+            return ResponseEntity.ok()
+                    .header("Content-Type", "image/jpeg") // Adjust the content type as needed
+                    .body(student.getPhoto());
+        } catch (Exception e) {
+            logger.error("Error fetching image for student ID " + id, e);
+            return ResponseEntity.status(500).build();
+        }
+
 	}
 
 }

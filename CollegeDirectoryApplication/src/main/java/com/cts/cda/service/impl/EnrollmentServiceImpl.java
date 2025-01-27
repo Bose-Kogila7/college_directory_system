@@ -76,4 +76,10 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 		return enrollmentModels;
 	}
 
+	@Override
+	public boolean isStudentEnrolledInCourse(Long studentId, Long courseId) {
+		// TODO Auto-generated method stub
+		return enrollmentRepository.existsByStudentIdAndCourseId(studentId, courseId);
+	}
+
 }

@@ -24,8 +24,9 @@ public class FacultyProfile {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
-	private String photo;
+	@Lob
+	@Column(columnDefinition = "LONGBLOB")
+	private byte[] photo;
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;
@@ -47,11 +48,11 @@ public class FacultyProfile {
 		this.user = user;
 	}
 
-	public String getPhoto() {
+	public byte[] getPhoto() {
 		return photo;
 	}
 
-	public void setPhoto(String photo) {
+	public void setPhoto(byte[] photo) {
 		this.photo = photo;
 	}
 

@@ -108,4 +108,10 @@ public class UserServiceImpl implements UserService {
 		return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
 	}
+
+	@Override
+	public Optional<User> findById(Long id) {
+		// TODO Auto-generated method stub
+		return userRepository.findById(id);
+	}
 }

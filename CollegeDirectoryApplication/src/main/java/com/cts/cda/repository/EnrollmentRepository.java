@@ -43,5 +43,8 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment,Long> {
 		        "JOIN c.faculty f " +
 		        "WHERE e.student.user.id = :studentId")
 		List<CourseModel> findCoursesByStudentId(@Param("studentId") Long studentId);
+	 
+	 @Query("SELECT CASE WHEN COUNT(e) > 0 THEN true ELSE false END FROM Enrollment e WHERE e.student.id = :studentId AND e.course.id = :courseId")
+	    boolean existsByStudentIdAndCourseId(@Param("studentId") Long studentId, @Param("courseId") Long courseId);
 	
 }

@@ -15,8 +15,9 @@ public class StudentProfile {
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-    private String photo;
+	@Lob
+	@Column(columnDefinition = "LONGBLOB")
+    private byte[] photo;
     
     @ManyToOne
     @JoinColumn(name = "department_id")
@@ -28,7 +29,7 @@ public class StudentProfile {
 		super();
 	}
 
-	public StudentProfile(Long userId, User user, String photo, Department department, String year) {
+	public StudentProfile(Long userId, User user,byte[] photo, Department department, String year) {
 		super();
 		this.userId = userId;
 		this.user = user;
@@ -62,11 +63,11 @@ public class StudentProfile {
 		this.user = user;
 	}
 
-	public String getPhoto() {
+	public byte[] getPhoto() {
 		return photo;
 	}
 
-	public void setPhoto(String photo) {
+	public void setPhoto(byte[] photo) {
 		this.photo = photo;
 	}
 

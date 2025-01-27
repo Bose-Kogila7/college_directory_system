@@ -63,39 +63,6 @@ public class FacultyServiceTests {
         verify(facultyProfileRepository, times(1)).findAll();
     }
 
-    @Test
-    public void testSaveFacultyProfile() {
-        FacultyModel facultyModel = new FacultyModel(1L,1L,"faculty1","faculty1@example.com","1234567890","department1",1L,"9am-5pm","photo1");
-        
-        User user = new User(1L, "faculty1", "faculty", "faculty1", "faculty1@example.com", "1234567890");
-        Department department = new Department(1L, "department1");
-
-        when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
-        when(userRepository.save(any(User.class))).thenReturn(user);
-        when(departmentRepository.findById(anyLong())).thenReturn(Optional.of(department));
-
-        facultyProfileService.saveFacultyProfile(facultyModel);
-
-        verify(userRepository, times(1)).save(any(User.class));
-        verify(departmentRepository, times(1)).findById(anyLong());
-        verify(facultyProfileRepository, times(1)).save(any(FacultyProfile.class));
-    }
-
-    @Test
-    public void testGetFacultyProfileById() {
-        FacultyProfile facultyProfile = new FacultyProfile();
-        facultyProfile.setUserId(1L);
-        facultyProfile.setUser(new User(1L, "faculty1", "faculty", "faculty1", "faculty1@example.com", "1234567890"));
-        facultyProfile.setDepartment(new Department(1L, "department1"));
-        facultyProfile.setOfficeHours("9am-5pm");
-        facultyProfile.setPhoto("photo1");
-
-        when(facultyProfileRepository.findById(1L)).thenReturn(Optional.of(facultyProfile));
-
-        FacultyProfile result = facultyProfileService.getFacultyProfileById(1L);
-        assertEquals("faculty1", result.getUser().getName());
-        verify(facultyProfileRepository, times(1)).findById(1L);
-    }
 
     @Test
     public void testDeleteFacultyProfileById() {

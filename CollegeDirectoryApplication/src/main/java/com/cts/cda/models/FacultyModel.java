@@ -9,7 +9,7 @@ public class FacultyModel {
 	
 		private Long id;
 	  	private Long userId;
-	    private String photo;
+	    private byte[] photo;
 	    @NotBlank(message = "Name must not be blank")
 	    private String name;
 	    private String password;
@@ -23,7 +23,7 @@ public class FacultyModel {
 	    @NotBlank(message = "Office hours must not be blank")
 	    private String officeHours;
 
-	    public FacultyModel(Long id,Long userId, String photo, String name, String email, String phone,Long departmentId , String departmentName,String officeHours) {
+	    public FacultyModel(Long id,Long userId, byte[] photo, String name, String email, String phone,Long departmentId , String departmentName,String officeHours) {
 	        this.id=id;
 	        this.userId = userId;
 	        this.photo = photo;

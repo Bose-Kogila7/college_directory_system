@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cts.cda.entity.FacultyProfile;
+import com.cts.cda.entity.StudentProfile;
 import com.cts.cda.entity.User;
 import com.cts.cda.models.FacultyModel;
 import com.cts.cda.models.StudentCourseModel;
@@ -59,6 +60,12 @@ public class FacultyController {
 	@ResponseBody
 	public ResponseEntity<?> getStudentList(@PathVariable Long facultyId)
 	{
+		Optional<FacultyProfile> facultyProfile = facultyProfileService.findById(facultyId);
+        if (!facultyProfile.isPresent()) {
+        	logger.info("You are not a registered faculty. Contact your administrator.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("You are not a registered faculty. Contact your administrator.");
+        }
 		System.out.println("Hello "+facultyId);
 		List<StudentCourseModel>  studentList = enrollmentService.getStudentsByFacultyId(facultyId);
 		return ResponseEntity.ok(studentList);
@@ -83,5 +90,9 @@ public class FacultyController {
 					.body("Error updating faculty: " + e.getMessage());
 		}
 	}
+	@GetMapping("/faculty/image/{id}")
+    public ResponseEntity<byte[]> getImage(@PathVariable Long id) {
+        return facultyProfileService.getImage(id);
+    }
 	
 }

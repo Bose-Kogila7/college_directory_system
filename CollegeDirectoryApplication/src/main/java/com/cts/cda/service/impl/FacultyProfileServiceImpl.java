@@ -3,11 +3,13 @@ package com.cts.cda.service.impl;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.cts.cda.entity.Department;
 import com.cts.cda.entity.FacultyProfile;
+import com.cts.cda.entity.StudentProfile;
 import com.cts.cda.entity.User;
 import com.cts.cda.models.FacultyModel;
 import com.cts.cda.repository.DepartmentRepository;
@@ -100,6 +102,20 @@ private PasswordEncoder passwordEncoder;
 	public Optional<FacultyProfile> findById(long id) {
 		// TODO Auto-generated method stub
 		return facultyProfileRepository.findById(id);
+	}
+
+	@Override
+	public ResponseEntity<byte[]> getImage(Long id) {
+		try {
+            FacultyProfile faculty = facultyProfileRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("faculty not found with ID: " + id));
+
+            return ResponseEntity.ok()
+                    .header("Content-Type", "image/jpeg") // Adjust the content type as needed
+                    .body(faculty.getPhoto());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).build();
+        }
 	}
 	
 	

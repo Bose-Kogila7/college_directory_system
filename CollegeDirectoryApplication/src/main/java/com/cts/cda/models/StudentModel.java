@@ -9,7 +9,7 @@ public class StudentModel {
 	
 	private Long id;
 	private Long userId;
-    private String photo;
+    private byte[] photo;
     private Long departmentId;
     private String year;
     @NotBlank(message = "Name must not be blank")
@@ -22,7 +22,7 @@ public class StudentModel {
     private String password;
     @NotBlank(message = "User Name must not be blank")
     private String userName;
-    public StudentModel(Long id,Long userId, String photo, Long departmentId, String year,String userName, String name, String email, String phone) {
+    public StudentModel(Long id,Long userId, byte[] photo, Long departmentId, String year,String userName, String name, String email, String phone) {
         this.id=id;
     	this.userId = userId;
         this.photo = photo;
@@ -33,7 +33,7 @@ public class StudentModel {
         this.email = email;
         this.phone = phone;
     }
-    public StudentModel(Long id, Long userId, String photo, String name, String email, String phone, Long departmentId, String departmentName, String year) {
+    public StudentModel(Long id, Long userId, byte[] photo, String name, String email, String phone, Long departmentId, String departmentName, String year) {
         this.id = id;
         this.userId = userId;
         this.photo = photo;
